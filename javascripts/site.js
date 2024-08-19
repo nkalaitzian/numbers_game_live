@@ -105,6 +105,7 @@ function assignNumber(spotButton) {
   textTarget.innerHTML = rngText.innerHTML;
   toggleRngButton(true);
   toggleSpotButtons(false);
+  spotButton.target.classList.add("hidden");
   if (rngText.innerHTML > maxValueFilled) {
     maxValueFilled = rngText.innerHTML;
   }
@@ -117,6 +118,7 @@ function reset() {
   toggleRngButton(true);
   toggleSpotButtons(false);
   spotButtons.forEach((spotButton) => {
+    spotButton.classList.remove('hidden');
     targetTextId = spotButton.dataset['textTarget'];
     textTarget = document.getElementById(targetTextId);
     textTarget.innerHTML = '';

@@ -1,8 +1,8 @@
 body {
   background-color: #fbc547;
   color: #333;
-  font-family: -apple-system, BlinkMacSystemFont, "Avenir Next", "Avenir", "Segoe UI", "Lucida Grande", "Helvetica Neue", "Helvetica", "Fira Sans", "Roboto", "Noto", "Droid Sans", "Cantarell", "Oxygen", "Ubuntu", "Franklin Gothic Medium", "Century Gothic", "Liberation Sans", sans-serif;
-  padding: 18vh 1rem;
+  font-family: "Ubuntu", sans-serif;
+  padding: 5vh 1rem;
   text-align: center; }
 
 a {
@@ -18,8 +18,12 @@ a {
   text-align: left; }
 
 .center-align {
-  -ms-grid-row-align: center;
-      align-self: center; }
+  margin-left: auto;
+  margin-right: auto; }
+
+table {
+  margin-top: 5vh;
+  width: 80vw; }
 
 table, th, td {
   border: 1px solid black;
@@ -30,3 +34,9 @@ td {
 
 .cell_rng {
   max-width: 200px; }
+
+.hidden {
+  display: none; }
+
+footer {
+  margin-top: 5vh; }
