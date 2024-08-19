@@ -38,32 +38,32 @@ function toggleSpotButtons(toggleState) {
 
 function enableSpotButtons(rngValue) {
   eligibleButtons = spotButtons;
-  if (minValueFilled == '1001' && maxValueFilled == '-1') {
-    eligibleButtons = spotButtons;
-  } else {
-    for (let i = 0; i < spotButtons.length; i++) {
-      currentButton = spotButtons[i];
-      currentText = buttonSpotText(currentButton);
-      previousButton = spotButtons[i-1];
-      previousText = buttonSpotText(previousButton);
-      if (currentText != '') {
-        if (rngValue < minValueFilled) {
-          eligibleButtons.push(currentButton);
-        } else if (rngValue > minValueFilled && rngValue < maxValueFilled) {
-          eligibleButtons.push(currentButton);
-        } else if (rngValue > maxValueFilled) {
-          eligibleButtons.push(currentButton);
-        }
-      }
-    }
-  }
+  // if (minValueFilled == '1001' && maxValueFilled == '-1') {
+  //   eligibleButtons = spotButtons;
+  // } else {
+  //   for (let i = 0; i < spotButtons.length; i++) {
+  //     currentButton = spotButtons[i];
+  //     currentText = buttonSpotText(currentButton);
+  //     previousButton = spotButtons[i-1];
+  //     previousText = buttonSpotText(previousButton);
+  //     if (currentText != '') {
+  //       if (rngValue < minValueFilled) {
+  //         eligibleButtons.push(currentButton);
+  //       } else if (rngValue > minValueFilled && rngValue < maxValueFilled) {
+  //         eligibleButtons.push(currentButton);
+  //       } else if (rngValue > maxValueFilled) {
+  //         eligibleButtons.push(currentButton);
+  //       }
+  //     }
+  //   }
+  // }
 
-  if (eligibleButtons.length == 0) {
-    titleParagraph.innerHTML = 'You lost :(';
-    toggleRngButton(false);
-    toggleSpotButtons(false);
-    return;
-  }
+  // if (eligibleButtons.length == 0) {
+  //   titleParagraph.innerHTML = 'You lost :(';
+  //   toggleRngButton(false);
+  //   toggleSpotButtons(false);
+  //   return;
+  // }
   eligibleButtons.forEach((spotButton) => { enableSpotButton(spotButton) });
 }
 
