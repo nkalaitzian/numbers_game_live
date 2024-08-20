@@ -6,24 +6,21 @@ window.onload = function(){
 
 titleParagraph = null;
 rngText = null;
-rngButton = null;
 spotButtons = [];
 maxValueFilled = '-1';
 minValueFilled = '1001';
+score = 0;
 
 function init() {
-  rngButton = document.getElementById('rngBtn');
   rngText = document.getElementById('rngText');
   titleParagraph = document.getElementById('titleParagraph');
   titleParagraph.innerHTML = 'Numbers Game';
-  rngButton.addEventListener("click", generateRng);
   spotButtons = Array.prototype.slice.call(document.getElementsByClassName('spotButton'));
   spotButtons.forEach((spotButton) => {
     spotButton.addEventListener("click", (sB) => assignNumber(sB));
   });
   toggleSpotButtons(false);
-  toggleRngButton(true);
-  document.getElementById('reset_btn').addEventListener('click', reset);
+  document.getElementById('newGameButton').addEventListener('click', newGame);
 }
 
 function toggleSpotButtons(toggleState) {
@@ -60,7 +57,6 @@ function enableSpotButtons(rngValue) {
 
   // if (eligibleButtons.length == 0) {
   //   titleParagraph.innerHTML = 'You lost :(';
-  //   toggleRngButton(false);
   //   toggleSpotButtons(false);
   //   return;
   // }
@@ -88,14 +84,9 @@ function disableSpotButton(spotButton) {
   spotButton.disabled = true;
 }
 
-function toggleRngButton(toggleState) {
-  rngButton.disabled = !toggleState;
-}
-
 function generateRng() {
   rngValue = Math.floor(Math.random() * 1000) + 1;
   rngText.innerHTML = rngValue;
-  toggleRngButton(false);
   enableSpotButtons(rngValue);
 }
 
@@ -103,7 +94,6 @@ function assignNumber(spotButton) {
   targetTextId = spotButton.target.dataset['textTarget'];
   textTarget = document.getElementById(targetTextId);
   textTarget.innerHTML = rngText.innerHTML;
-  toggleRngButton(true);
   toggleSpotButtons(false);
   spotButton.target.classList.add("hidden");
   if (rngText.innerHTML > maxValueFilled) {
@@ -112,10 +102,17 @@ function assignNumber(spotButton) {
   if (rngText.innerHTML < minValueFilled) {
     minValueFilled = rngText.innerHTML;
   }
+  generateRng();
+  updateScore(score + 1);
 }
 
-function reset() {
-  toggleRngButton(true);
+function updateScore(newScore) {
+  score = newScore;
+  scoreLabel = document.getElementById('scoreLabel');
+  scoreLabel.innerHTML = 'Score <strong>' + score + '</strong>/20';
+}
+
+function newGame() {
   toggleSpotButtons(false);
   spotButtons.forEach((spotButton) => {
     spotButton.classList.remove('hidden');
@@ -127,4 +124,6 @@ function reset() {
   maxValueFilled = '-1';
   minValueFilled = '1001';
   titleParagraph.innerHTML = 'Numbers Game';
+  generateRng();
+  updateScore(0);
 }
