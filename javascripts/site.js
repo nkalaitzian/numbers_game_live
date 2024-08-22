@@ -6,6 +6,7 @@ window.onload = function () {
 
 let titleParagraph = null;
 let rngText = null;
+let rngLabel = null;
 let spotButtons = [];
 let maxValueFilled = "-1";
 let minValueFilled = "1001";
@@ -14,6 +15,7 @@ let score = 0;
 
 function init() {
   rngText = document.getElementById("rngText");
+  rngLabel = document.getElementById("rngLabel");
   titleParagraph = document.getElementById("titleParagraph");
   titleParagraph.innerHTML = "Numbers Game";
   spotButtons = Array.prototype.slice.call(
@@ -37,32 +39,42 @@ function toggleSpotButtons(toggleState) {
 }
 
 function enableSpotButtons(rngValue) {
-  eligibleButtons = spotButtons;
-  // if (minValueFilled == '1001' && maxValueFilled == '-1') {
-  //   eligibleButtons = spotButtons;
-  // } else {
-  //   for (let i = 0; i < spotButtons.length; i++) {
-  //     currentButton = spotButtons[i];
-  //     currentText = buttonSpotText(currentButton);
-  //     previousButton = spotButtons[i-1];
-  //     previousText = buttonSpotText(previousButton);
-  //     if (currentText != '') {
-  //       if (rngValue < minValueFilled) {
-  //         eligibleButtons.push(currentButton);
-  //       } else if (rngValue > minValueFilled && rngValue < maxValueFilled) {
-  //         eligibleButtons.push(currentButton);
-  //       } else if (rngValue > maxValueFilled) {
-  //         eligibleButtons.push(currentButton);
-  //       }
-  //     }
-  //   }
-  // }
+  eligibleButtons = [];
+  if (minValueFilled == '1001' && maxValueFilled == '-1') {
+    eligibleButtons = spotButtons;
+  } else {
+    indexSmallerThanRng = 0;
+    indexBiggerThanRng = 0;
+    for (let i = 0; i < spotButtons.length; i++) {
+      currentButton = spotButtons[i];
+      currentText = buttonSpotText(currentButton);
+      if (currentText != '') {
+        currentCellNumber = parseInt(currentText);
+        if (rngValue < currentCellNumber && indexSmallerThanRng == 0) {
+          indexSmallerThanRng = i;
+        } else if (rngValue > currentCellNumber) {
+          indexBiggerThanRng = i;
+        }
+      }
+    }
+    if (indexSmallerThanRng == 0) {
+      indexSmallerThanRng = 20;
+    }
+    console.log(`Smaller than index: ${indexSmallerThanRng}`);
+    console.log(`Bigger than index: ${indexBiggerThanRng}`);
+    for (let y = indexBiggerThanRng; y < indexSmallerThanRng; y++) {
+      currentButton = spotButtons[y];
+      if (!Array.prototype.slice.call(currentButton.classList).includes('hidden')) {
+        eligibleButtons.push(currentButton);
+      }
+    }
+  }
 
-  // if (eligibleButtons.length == 0) {
-  //   titleParagraph.innerHTML = 'You lost :(';
-  //   toggleSpotButtons(false);
-  //   return;
-  // }
+  if (eligibleButtons.length == 0) {
+    titleParagraph.innerHTML = 'No available moves. You lost :(';
+    toggleSpotButtons(false);
+    return;
+  }
   eligibleButtons.forEach((spotButton) => {
     enableSpotButton(spotButton);
   });
@@ -90,9 +102,9 @@ function disableSpotButton(spotButton) {
 }
 
 function rng() {
-  newRng = Math.floor(Math.random() * 1000) + 1 + "";
+  newRng = Math.floor(Math.random() * 1000) + 1;
   while (assignedNumbers.includes(newRng)) {
-    newRng = Math.floor(Math.random() * 1000) + 1 + "";
+    newRng = Math.floor(Math.random() * 1000) + 1;
   }
   return newRng;
 }
@@ -107,7 +119,7 @@ function assignNumber(spotButton) {
   targetTextId = spotButton.target.dataset["textTarget"];
   textTarget = document.getElementById(targetTextId);
   textTarget.innerHTML = rngText.innerHTML;
-  assignedNumbers.push(rngText.innerHTML);
+  assignedNumbers.push(parseInt(rngText.innerHTML));
   toggleSpotButtons(false);
   spotButton.target.classList.add("hidden");
   if (rngText.innerHTML > maxValueFilled) {
@@ -124,6 +136,17 @@ function updateScore(newScore) {
   score = newScore;
   scoreLabel = document.getElementById("scoreLabel");
   scoreLabel.innerHTML = "Score <strong>" + score + "</strong>/20";
+  if (score == 5) {
+    rngLabel.innerHTML = "<strong>Keep at it!</strong";
+  } else if (score == 10) {
+    rngLabel.innerHTML = "<strong>Halfway point!</strong";
+  } else if (score == 15) {
+    rngLabel.innerHTML = "<strong>You're almost there!</strong";
+  } else if (score == 20) {
+    rngLabel.innerHTML = "<strong>You Won! Here's a star: ⭐</strong";
+  } else {
+    rngLabel.innerHTML = "";
+  }
 }
 
 function newGame() {
