@@ -2,8 +2,20 @@ body {
   background-color: #fbc547;
   color: #333;
   font-family: "Ubuntu", sans-serif;
-  padding: 5vh 1rem;
+  padding: 3vh;
   text-align: center; }
+
+.dark-mode {
+  background-color: #333333;
+  color: white; }
+
+.right {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 100px;
+  margin-top: 20px;
+  margin-right: 20px; }
 
 a {
   color: rgba(0, 0, 0, 0.7); }

@@ -12,11 +12,13 @@ let maxValueFilled = "-1";
 let minValueFilled = "1001";
 let assignedNumbers = [];
 let score = 0;
+let lost = false;
 
 function init() {
   rngText = document.getElementById("rngText");
   rngLabel = document.getElementById("rngLabel");
   titleParagraph = document.getElementById("titleParagraph");
+  document.getElementById('darkModeToggleButton').addEventListener('click', darkModeToggle);
   titleParagraph.innerHTML = "Numbers Game";
   spotButtons = Array.prototype.slice.call(
     document.getElementsByClassName("spotButton"),
@@ -71,7 +73,7 @@ function enableSpotButtons(rngValue) {
   }
 
   if (eligibleButtons.length == 0) {
-    titleParagraph.innerHTML = 'No available moves. You lost :(';
+    lost = true;
     toggleSpotButtons(false);
     return;
   }
@@ -136,7 +138,9 @@ function updateScore(newScore) {
   score = newScore;
   scoreLabel = document.getElementById("scoreLabel");
   scoreLabel.innerHTML = "Score <strong>" + score + "</strong>/20";
-  if (score == 5) {
+  if (lost) {
+    rngLabel.innerHTML = "<strong>No available moves.</br>You lost :(</strong>";
+  } else if (score == 5) {
     rngLabel.innerHTML = "<strong>Keep at it!</strong";
   } else if (score == 10) {
     rngLabel.innerHTML = "<strong>Halfway point!</strong";
@@ -147,6 +151,11 @@ function updateScore(newScore) {
   } else {
     rngLabel.innerHTML = "";
   }
+}
+
+function darkModeToggle() {
+  var element = document.body;
+  element.classList.toggle("dark-mode");
 }
 
 function newGame() {
@@ -162,6 +171,7 @@ function newGame() {
   minValueFilled = "1001";
   titleParagraph.innerHTML = "Numbers Game";
   assignedNumbers = [];
+  lost = false;
   generateRng();
   updateScore(0);
 }
