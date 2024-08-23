@@ -13,12 +13,14 @@ let minValueFilled = "1001";
 let assignedNumbers = [];
 let score = 0;
 let lost = false;
+let darkModeButton = null;
 
 function init() {
   rngText = document.getElementById("rngText");
   rngLabel = document.getElementById("rngLabel");
   titleParagraph = document.getElementById("titleParagraph");
-  document.getElementById('darkModeToggleButton').addEventListener('click', darkModeToggle);
+  darkModeButton = document.getElementById('darkModeToggleButton');
+  darkModeButton.addEventListener('click', darkModeToggle);
   titleParagraph.innerHTML = "Numbers Game";
   spotButtons = Array.prototype.slice.call(
     document.getElementsByClassName("spotButton"),
@@ -156,6 +158,11 @@ function updateScore(newScore) {
 function darkModeToggle() {
   var element = document.body;
   element.classList.toggle("dark-mode");
+  if (Array.prototype.slice.call(element.classList).includes('dark-mode')) {
+    darkModeButton.innerHTML = 'Light Mode';
+  } else {
+    darkModeButton.innerHTML = 'Dark Mode';
+  }
 }
 
 function newGame() {
