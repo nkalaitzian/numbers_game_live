@@ -1,19 +1,19 @@
 body {
-  background-color: #fbc547;
+  background-color: #7091e6;
   color: #333;
   font-family: "Ubuntu", sans-serif;
+  font-size: 16px;
   padding: 3vh;
   text-align: center; }
 
 .dark-mode {
   background-color: #333333;
-  color: white; }
+  color: #d8d8d8; }
 
 .right {
   position: absolute;
   top: 0;
   right: 0;
-  width: 100px;
   margin-top: 20px;
   margin-right: 20px; }
 
@@ -21,10 +21,6 @@ a {
   color: rgba(0, 0, 0, 0.7); }
   a:focus, a:hover {
     color: rgba(0, 0, 0, 0.6); }
-
-.middleman-logo {
-  margin-bottom: 1rem;
-  width: 10rem; }
 
 .left-align {
   text-align: left; }
@@ -34,8 +30,8 @@ a {
   margin-right: auto; }
 
 table {
-  margin-top: 5vh;
-  width: 70vw; }
+  margin-top: 3vh;
+  width: 80vw; }
 
 table, th, td {
   border: 1px solid black;
@@ -44,10 +40,11 @@ table, th, td {
 td {
   height: 22px;
   min-width: 100px;
-  max-width: 200px; }
+  max-width: 40vw; }
 
-.cell_rng {
-  max-width: 200px; }
+th {
+  max-width: 10vw;
+  min-width: 10px; }
 
 .hidden {
   display: none; }
