@@ -21,6 +21,9 @@ function init() {
   titleParagraph = document.getElementById("titleParagraph");
   darkModeButton = document.getElementById('darkModeToggleButton');
   darkModeButton.addEventListener('click', darkModeToggle);
+  if (sessionStorage.getItem('darkMode') == 'on') {
+    darkModeToggle();
+  }
   titleParagraph.innerHTML = "Numbers Game";
   spotButtons = Array.prototype.slice.call(
     document.getElementsByClassName("spotButton"),
@@ -192,8 +195,10 @@ function darkModeToggle() {
   element.classList.toggle("dark-mode");
   if (Array.prototype.slice.call(element.classList).includes('dark-mode')) {
     darkModeButton.innerHTML = 'Light Mode';
+    sessionStorage.darkMode = 'on';
   } else {
     darkModeButton.innerHTML = 'Dark Mode';
+    sessionStorage.darkMode = 'off';
   }
 }
 
