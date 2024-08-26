@@ -32,6 +32,7 @@ function init() {
   document.getElementById("newGameButton").addEventListener("click", newGame);
 }
 
+// Massively enable all assign buttons
 function toggleSpotButtons(toggleState) {
   spotButtons.forEach((spotButton) => {
     if (toggleState) {
@@ -42,38 +43,67 @@ function toggleSpotButtons(toggleState) {
   });
 }
 
+// Check if the RNG is inside the bounds of the already assigned numbers
+function canAssignRngValue(rngValue) {
+  firstButtonText = buttonSpotText(spotButtons[0]);
+  lastButtonText = buttonSpotText(spotButtons[19]);
+
+  if (firstButtonText != '' && parseInt(firstButtonText) > rngValue) {
+    return false;
+  } else if (lastButtonText != '' && parseInt(lastButtonText) < rngValue) {
+    return false;
+  }
+  return true;
+}
+
+// Check which buttons are eligible to be enabled
 function enableSpotButtons(rngValue) {
   eligibleButtons = [];
   if (minValueFilled == '1001' && maxValueFilled == '-1') {
     eligibleButtons = spotButtons;
+  } else if (!canAssignRngValue(rngValue)) {
+    eligibleButtons = [];
   } else {
-    indexSmallerThanRng = 0;
-    indexBiggerThanRng = 0;
+    startIndex = -1;
+    endIndex = -1;
     for (let i = 0; i < spotButtons.length; i++) {
       currentButton = spotButtons[i];
       currentText = buttonSpotText(currentButton);
       if (currentText != '') {
         currentCellNumber = parseInt(currentText);
-        if (rngValue < currentCellNumber && indexSmallerThanRng == 0) {
-          indexSmallerThanRng = i;
-        } else if (rngValue > currentCellNumber) {
-          indexBiggerThanRng = i;
+        if (rngValue < currentCellNumber) {
+          endIndex = i-1;
+          break;
         }
       }
     }
-    if (indexSmallerThanRng == 0) {
-      indexSmallerThanRng = 20;
+    for (let i = (spotButtons.length - 1); i > 0; i--) {
+      currentButton = spotButtons[i];
+      currentText = buttonSpotText(currentButton);
+      if (currentText != '') {
+        currentCellNumber = parseInt(currentText);
+        if (rngValue > currentCellNumber) {
+          console.log(`Compared rngValue: ${rngValue} with cell value: ${currentCellNumber}`);
+          startIndex = i+1;
+          break;
+        }
+      }
     }
-    console.log(`Smaller than index: ${indexSmallerThanRng}`);
-    console.log(`Bigger than index: ${indexBiggerThanRng}`);
-    for (let y = indexBiggerThanRng; y < indexSmallerThanRng; y++) {
+    if (endIndex == -1) {
+      endIndex = 20;
+    }
+    if (startIndex == -1) {
+      startIndex = 0;
+    }
+
+    // console.log(`RngValue: ${rngValue}, startIndex: ${startIndex}, endIndex: ${endIndex}`);
+    for (let y = startIndex; y <= endIndex; y++) {
       currentButton = spotButtons[y];
-      if (!Array.prototype.slice.call(currentButton.classList).includes('hidden')) {
+      if (currentButton != null && !Array.prototype.slice.call(currentButton.classList).includes('hidden')) {
         eligibleButtons.push(currentButton);
       }
     }
   }
-
   if (eligibleButtons.length == 0) {
     lost = true;
     toggleSpotButtons(false);
@@ -96,7 +126,7 @@ function buttonSpotText(spotButton) {
 function enableSpotButton(spotButton) {
   targetTextId = spotButton.dataset["textTarget"];
   textTarget = document.getElementById(targetTextId);
-  if (textTarget.innerHTML == "") {
+  if (textTarget.innerHTML == '') {
     spotButton.disabled = false;
   }
 }
@@ -105,7 +135,8 @@ function disableSpotButton(spotButton) {
   spotButton.disabled = true;
 }
 
-function rng() {
+// Generate the RNG whilst checking that the generate number was not already generated.
+function generateRng() {
   newRng = Math.floor(Math.random() * 1000) + 1;
   while (assignedNumbers.includes(newRng)) {
     newRng = Math.floor(Math.random() * 1000) + 1;
@@ -113,8 +144,9 @@ function rng() {
   return newRng;
 }
 
-function generateRng() {
-  rngValue = rng();
+// Assign the RNG to the Label & enable the appropriate buttons
+function generateAndAssignRng() {
+  rngValue = generateRng();
   rngText.innerHTML = rngValue;
   enableSpotButtons(rngValue);
 }
@@ -132,7 +164,7 @@ function assignNumber(spotButton) {
   if (rngText.innerHTML < minValueFilled) {
     minValueFilled = rngText.innerHTML;
   }
-  generateRng();
+  generateAndAssignRng();
   updateScore(score + 1);
 }
 
@@ -179,6 +211,6 @@ function newGame() {
   titleParagraph.innerHTML = "Numbers Game";
   assignedNumbers = [];
   lost = false;
-  generateRng();
+  generateAndAssignRng();
   updateScore(0);
 }
