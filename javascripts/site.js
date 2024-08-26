@@ -21,7 +21,7 @@ function init() {
   titleParagraph = document.getElementById("titleParagraph");
   darkModeButton = document.getElementById('darkModeToggleButton');
   darkModeButton.addEventListener('click', darkModeToggle);
-  if (sessionStorage.getItem('darkMode') == 'on') {
+  if (getCookie('darkMode') == 'on') {
     darkModeToggle();
   }
   titleParagraph.innerHTML = "Numbers Game";
@@ -195,10 +195,10 @@ function darkModeToggle() {
   element.classList.toggle("dark-mode");
   if (Array.prototype.slice.call(element.classList).includes('dark-mode')) {
     darkModeButton.innerHTML = 'Light Mode';
-    sessionStorage.darkMode = 'on';
+    setCookie('darkMode', 'on');
   } else {
     darkModeButton.innerHTML = 'Dark Mode';
-    sessionStorage.darkMode = 'off';
+    setCookie('darkMode', 'off');
   }
 }
 
@@ -218,4 +218,26 @@ function newGame() {
   lost = false;
   generateAndAssignRng();
   updateScore(0);
+}
+
+function getCookie(cookieName) {
+  let cookie = cookieName + '=';
+  let cookies =  decodeURIComponent(document.cookie).split(';');
+  for (let i = 0; i < cookies.length; i++) {
+    let c = cookies[i];
+    while (c.charAt(0) == ' ') {
+      c = c.substring(1);
+    }
+    if (c.indexOf(cookie) == 0) {
+      return c.substring(cookie.length, c.length);
+    }
+  }
+  return '';
+}
+
+function setCookie(cookieName, cookieValue) {
+  const d = new Date();
+  d.setTime(d.getTime() + (180*24*60*60*1000));
+  let expires = "expires="+ d.toUTCString();
+  document.cookie = cookieName + "=" + cookieValue + ";" + expires + ";path=/";
 }
